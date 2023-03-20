@@ -1,0 +1,46 @@
+pip 23.0.1 from /usr/local/lib/python3.10/dist-packages/pip (python 3.10)
+
+Name: boto3
+Version: 1.26.94
+Summary: The AWS SDK for Python
+Home-page: https://github.com/boto/boto3
+Author: Amazon Web Services
+Author-email: 
+License: Apache License 2.0
+Location: /usr/local/lib/python3.10/dist-packages
+Requires: botocore, jmespath, s3transfer
+Required-by: 
+
+Name: botocore
+Version: 1.29.94
+Summary: Low-level, data-driven core of boto 3.
+Home-page: https://github.com/boto/botocore
+Author: Amazon Web Services
+Author-email: 
+License: Apache License 2.0
+Location: /usr/local/lib/python3.10/dist-packages
+Requires: jmespath, python-dateutil, urllib3
+Required-by: boto3, s3transfer
+
+Name: jmespath
+Version: 1.0.1
+Summary: JSON Matching Expressions
+Home-page: https://github.com/jmespath/jmespath.py
+Author: James Saryerwinnie
+Author-email: js@jamesls.com
+License: MIT
+Location: /usr/local/lib/python3.10/dist-packages
+Requires: 
+Required-by: boto3, botocore
+
+Name: s3transfer
+Version: 0.6.0
+Summary: An Amazon S3 Transfer Manager
+Home-page: https://github.com/boto/s3transfer
+Author: Amazon Web Services
+Author-email: kyknapp1@gmail.com
+License: Apache License 2.0
+Location: /usr/local/lib/python3.10/dist-packages
+Requires: botocore
+Required-by: boto3
+
