@@ -1,0 +1,76 @@
+#
+# This file is a template for building a docer image from a Debian or
+# Ubuntu base image 
+### Debiboto( DEBIAN Linux ) dockerfile ( python:bullseye )
+#       ubunboto( DEBIAN Linux ) dockerfile ( ubuntu:lastest )
+#
+# Case InSensitive RECURSIVE search from <SomeDirectory> for <FileName>
+# ( find  ~/Desktop -iname <FileName> )
+#
+# Case InSensitive RECURSIVE search from <SomeDirectory>
+# for files containing <TextToFind> ( LowcerCase ele ).
+# Display filenames where text was found.
+# ( grep -Ril <TextToFind> ~/Desktop )
+#
+# Case InSensitive RECURSIVE search from <SomeDirectory>
+# for files containing <TextToFind>.
+# Display filenames where text was found AND lines containing that text.
+# ( grep -Ri <TextToFind> ~/Desktop )
+#
+# List ALL containers
+# ( docker ps -a )
+#
+# Inspect an image
+# ( docker inspect <TAG> )
+#
+# List ALL images
+# ( docker images )
+#
+# Request garbage collection
+# ( docker system prune
+#
+# [ -f ] == Force removal of an image
+# ( docker rmi [ -f ] <TAG>)
+#
+# ( docker build -t <TAG> [ :<VersionID> ] . )
+#
+# [ --rm ] Delete container Not image after running
+# ( docker run [ --rm ] <TAG> [ :<VersionID> ] )
+#
+# ( docker exec it 2cbd79a1049d bash ) joins already running container's bash prompt.
+# ( docker exec -it [ --rm ] <Container ID> ] [ bash ] )
+#
+# [ -it ] Interactive
+# ( docker run -it [ --rm ] <TAG> [:<VersionID> ] [ bash ] )
+#
+# Uncomment one of the following to select the base image type
+#
+### FROM python:bullseye
+FROM ubuntu:latest
+
+RUN mkdir /vim-TMP; apt-get update; apt-get install -y git; apt-get install -y python3-pip; apt-get install -y vim; pip3 install --upgrade pip && pip3 install boto3 && pip3 install --upgrade boto3
+RUN pip3 install botocore && pip3 install --upgrade botocore && pip3 install jmespath && pip3 install --upgrade jmespath && pip3 install requests && pip3 install --upgrade requests && pip3 install s3transfer && pip3 install --upgrade s3transfer
+# Preserve original ( '/etc/vim/.vimrc' )
+RUN mv /etc/vim/vimrc /etc/vim/vimrc_ORG; cp /etc/os-release /image_os-release.txt
+# Store pip3 and boto3 related version info
+# Preserve original ( '/root/.bashrc' )
+RUN pip3 -V > /Pip3Boto3versions.txt; printf "\n" >> /Pip3Boto3versions.txt; pip3 show boto3 >> /Pip3Boto3versions.txt; printf "\n" >> /Pip3Boto3versions.txt; pip3 show botocore >> /Pip3Boto3versions.txt; printf "\n" >> /Pip3Boto3versions.txt
+RUN pip3 install pytest
+RUN pip3 show pytest
+RUN pip3 show jmespath >> /Pip3Boto3versions.txt; printf "\n" >> /Pip3Boto3versions.txt; pip3 show s3transfer >> Pip3Boto3versions.txt; printf "\n" >> Pip3Boto3versions.txt
+# Create ( alias ls='ls --color' ) line and suffix it to ( /root/.bashrc ) REQUIRED for Debian 'ls' colorization
+RUN mv /root/.bashrc /root/.bashrc_ORG; printf "\nalias ls='ls --color'\n" > /root/.bashrc_alias
+RUN cat /root/.bashrc_ORG >> /root/.bashrc; cat /root/.bashrc_alias >> /root/.bashrc; date > image_CreationDateTime.txt
+
+COPY py_example.py /
+COPY Dockerfile /
+COPY pytest_example.py .
+COPY vimrc /etc/vim/
+
+# Debian works with ( 'python' and 'python3' )
+# Ubuntu ONLY works with ( 'python3 )
+RUN pytest -vrP ./pytest_example.py > /result_pytest_example.txt
+RUN python3 ./py_example.py > /result_py_example.txt
+
+CMD "echo 'Hello World'"
+
